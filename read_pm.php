@@ -6,10 +6,27 @@ include('config.php');
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+    	<link href='/profile/css/styles.css' rel='stylesheet' type='text/css'>
+    	<script src="/profile/scripts/scrolltop.js" type="text/javascript"></script>
+    	<script language='Javascript' type='text/javascript'>
+			var topmenu = 5;
+			var rightmenu = 0;
+		</script>
         <link href="<?php echo $design; ?>/style.css" rel="stylesheet" title="Style" />
         <title>Read a PM</title>
     </head>
-    <body>
+    <body id="forum_body" >
+    	<script type='text/javascript' src='/profile/scripts/header_part1.js'></script>
+		<script type='text/javascript' src='/profile/scripts/topmenu.js'></script>
+		<script type='text/javascript' src='/profile/scripts/header_part2.js'></script>
+		<script type='text/javascript' src='/profile/scripts/header_part3.js'></script>
+		<span>
 <?php
 if(isset($_SESSION['username']))
 {
@@ -45,14 +62,14 @@ if(isset($_POST['message']) and $_POST['message']!='')
 	{
 ?>
 <div class="message">Your reply has successfully been sent.<br />
-<a href="read_pm.php?id=<?php echo $id; ?>">Go to the PM</a></div>
+<a id="forum_a" href="read_pm.php?id=<?php echo $id; ?>">Go to the PM</a></div>
 <?php
 	}
 	else
 	{
 ?>
 <div class="message">An error occurred while sending the reply.<br />
-<a href="read_pm.php?id=<?php echo $id; ?>">Go to the PM</a></div>
+<a id="forum_a" href="read_pm.php?id=<?php echo $id; ?>">Go to the PM</a></div>
 <?php
 	}
 }
@@ -69,10 +86,10 @@ $nb_new_pm = $nb_new_pm['nb_new_pm'];
 ?>
 <div class="box">
 	<div class="box_left">
-    	<a href="<?php echo $url_home; ?>">Forum Index</a> &gt; <a href="list_pm.php">List of your PMs</a> &gt; Read a PM
+    	<a id="forum_a" href="<?php echo $url_home; ?>">Forum Index</a> &gt; <a id="forum_a" href="list_pm.php">List of your PMs</a> &gt; Read a PM
     </div>
 	<div class="box_right">
-    	<a href="list_pm.php">Your messages(<?php echo $nb_new_pm; ?>)</a> - <a href="profile.php?id=<?php echo $_SESSION['userid']; ?>"><?php echo htmlentities($_SESSION['username'], ENT_QUOTES, 'UTF-8'); ?></a> (<a href="login.php">Logout</a>)
+    	<a id="forum_a" href="list_pm.php">Your messages(<?php echo $nb_new_pm; ?>)</a> - <a id="forum_a" href="profile.php?id=<?php echo $_SESSION['userid']; ?>"><?php echo htmlentities($_SESSION['username'], ENT_QUOTES, 'UTF-8'); ?></a> (<a id="forum_a" href="login.php">Logout</a>)
     </div>
     <div class="clean"></div>
 </div>
@@ -83,10 +100,10 @@ else
 ?>
 <div class="box">
 	<div class="box_left">
-    	<a href="<?php echo $url_home; ?>">Forum Index</a> &gt; <a href="list_pm.php">List of your PMs</a> &gt; Read a PM
+    	<a id="forum_a" href="<?php echo $url_home; ?>">Forum Index</a> &gt; <a id="forum_a" href="list_pm.php">List of your PMs</a> &gt; Read a PM
     </div>
 	<div class="box_right">
-    	<a href="signup.php">Sign Up</a> - <a href="login.php">Login</a>
+    	<a id="forum_a" href="signup.php">Sign Up</a> - <a id="forum_a" href="login.php">Login</a>
     </div>
     <div class="clean"></div>
 </div>
@@ -94,7 +111,7 @@ else
 }
 ?>
 <h1><?php echo $dn1['title']; ?></h1>
-<table class="messages_table">
+<table id="forum_table" class="messages_table">
 	<tr>
     	<th class="author">User</th>
         <th>Message</th>
@@ -109,7 +126,7 @@ if($dn2['avatar']!='')
 {
 	echo '<img src="'.htmlentities($dn2['avatar']).'" alt="Image Perso" style="max-width:100px;max-height:100px;" />';
 }
-?><br /><a href="profile.php?id=<?php echo $dn2['userid']; ?>"><?php echo $dn2['username']; ?></a></td>
+?><br /><a id="forum_a" href="profile.php?id=<?php echo $dn2['userid']; ?>"><?php echo $dn2['username']; ?></a></td>
     	<td class="left"><div class="date">Date sent: <?php echo date('Y/m/d H:i:s' ,$dn2['timestamp']); ?></div>
     	<?php echo $dn2['message']; ?></td>
     </tr>
@@ -119,7 +136,7 @@ if($dn2['avatar']!='')
 </table><br />
 <h2>Reply</h2>
 <div class="center">
-    <form action="read_pm.php?id=<?php echo $id; ?>" method="post">
+    <form id="forum_form" action="read_pm.php?id=<?php echo $id; ?>" method="post">
     	<label for="message" class="center">Message</label><br />
         <textarea cols="40" rows="5" name="message" id="message"></textarea><br />
         <input type="submit" value="Send" />
@@ -149,7 +166,7 @@ else
 ?>
 <div class="message">You must be logged to access this page.</div>
 <div class="box_login">
-	<form action="login.php" method="post">
+	<form id="forum_form" action="login.php" method="post">
 		<label for="username">Username</label><input type="text" name="username" id="username" /><br />
 		<label for="password">Password</label><input type="password" name="password" id="password" /><br />
         <label for="memorize">Remember</label><input type="checkbox" name="memorize" id="memorize" value="yes" />
@@ -161,5 +178,7 @@ else
 <?php
 }
 ?>
+		</span>
+		<script type='text/javascript' src='/profile/scripts/footer.js'></script>
 	</body>
 </html>

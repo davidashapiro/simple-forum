@@ -13,10 +13,27 @@ if($dn1['nb1']>0)
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+    	<link href='/profile/css/styles.css' rel='stylesheet' type='text/css'>
+    	<script src="/profile/scripts/scrolltop.js" type="text/javascript"></script>
+    	<script language='Javascript' type='text/javascript'>
+			var topmenu = 5;
+			var rightmenu = 0;
+		</script>
         <link href="<?php echo $design; ?>/style.css" rel="stylesheet" title="Style" />
         <title><?php echo htmlentities($dn1['name'], ENT_QUOTES, 'UTF-8'); ?> - Forum</title>
     </head>
-    <body>
+    <body id="forum_body">
+    	<script type='text/javascript' src='/profile/scripts/header_part1.js'></script>
+		<script type='text/javascript' src='/profile/scripts/topmenu.js'></script>
+		<script type='text/javascript' src='/profile/scripts/header_part2.js'></script>
+		<script type='text/javascript' src='/profile/scripts/header_part3.js'></script>
+		<span>
         <div class="content">
 <?php
 if(isset($_SESSION['username']))
@@ -27,10 +44,10 @@ $nb_new_pm = $nb_new_pm['nb_new_pm'];
 ?>
 <div class="box">
 	<div class="box_left">
-    	<a href="<?php echo $url_home; ?>">Forum Index</a> &gt; <a href="list_topics.php?parent=<?php echo $id; ?>"><?php echo htmlentities($dn1['name'], ENT_QUOTES, 'UTF-8'); ?></a>
+    	<a id="forum_a" href="<?php echo $url_home; ?>">Forum Index</a> &gt; <a id="forum_a" href="list_topics.php?parent=<?php echo $id; ?>"><?php echo htmlentities($dn1['name'], ENT_QUOTES, 'UTF-8'); ?></a>
     </div>
 	<div class="box_right">
-    	<a href="list_pm.php">Your messages(<?php echo $nb_new_pm; ?>)</a> - <a href="profile.php?id=<?php echo $_SESSION['userid']; ?>"><?php echo htmlentities($_SESSION['username'], ENT_QUOTES, 'UTF-8'); ?></a> (<a href="login.php">Logout</a>)
+    	<a id="forum_a" href="list_pm.php">Your messages(<?php echo $nb_new_pm; ?>)</a> - <a id="forum_a" href="profile.php?id=<?php echo $_SESSION['userid']; ?>"><?php echo htmlentities($_SESSION['username'], ENT_QUOTES, 'UTF-8'); ?></a> (<a id="forum_a" href="login.php">Logout</a>)
     </div>
 	<div class="clean"></div>
 </div>
@@ -41,10 +58,10 @@ else
 ?>
 <div class="box">
 	<div class="box_left">
-    	<a href="<?php echo $url_home; ?>">Forum Index</a> &gt; <a href="list_topics.php?parent=<?php echo $id; ?>"><?php echo htmlentities($dn1['name'], ENT_QUOTES, 'UTF-8'); ?></a>
+    	<a id="forum_a" href="<?php echo $url_home; ?>">Forum Index</a> &gt; <a id="forum_a" href="list_topics.php?parent=<?php echo $id; ?>"><?php echo htmlentities($dn1['name'], ENT_QUOTES, 'UTF-8'); ?></a>
     </div>
 	<div class="box_right">
-    	<a href="signup.php">Sign Up</a> - <a href="login.php">Login</a>
+    	<a id="forum_a" href="signup.php">Sign Up</a> - <a id="forum_a" href="login.php">Login</a>
     </div>
 	<div class="clean"></div>
 </div>
@@ -53,14 +70,14 @@ else
 if(isset($_SESSION['username']))
 {
 ?>
-	<a href="new_topic.php?parent=<?php echo $id; ?>" class="button">New Topic</a>
+	<a id="forum_a" href="new_topic.php?parent=<?php echo $id; ?>" class="button">New Topic</a>
 <?php
 }
 $dn2 = $db->query('select t.id, t.title, t.authorid, u.username as author, count(r.id) as replies from topics as t left join topics as r on r.parent="'.$id.'" and r.id=t.id and r.id2!=1  left join users as u on u.id=t.authorid where t.parent="'.$id.'" and t.id2=1 group by t.id order by t.timestamp2 desc');
 if($dn2->rowCount() > 0)
 {
 ?>
-<table class="topics_table">
+<table id="forum_table" class="topics_table">
 	<tr>
     	<th class="forum_tops">Topic</th>
     	<th class="forum_auth">Author</th>
@@ -79,14 +96,14 @@ while($dnn2 = $dn2->fetch())
 {
 ?>
 	<tr>
-    	<td class="forum_tops"><a href="read_topic.php?id=<?php echo $dnn2['id']; ?>"><?php echo htmlentities($dnn2['title'], ENT_QUOTES, 'UTF-8'); ?></a></td>
-    	<td><a href="profile.php?id=<?php echo $dnn2['authorid']; ?>"><?php echo htmlentities($dnn2['author'], ENT_QUOTES, 'UTF-8'); ?></a></td>
+    	<td class="forum_tops"><a id="forum_a" href="read_topic.php?id=<?php echo $dnn2['id']; ?>"><?php echo htmlentities($dnn2['title'], ENT_QUOTES, 'UTF-8'); ?></a></td>
+    	<td><a id="forum_a" href="profile.php?id=<?php echo $dnn2['authorid']; ?>"><?php echo htmlentities($dnn2['author'], ENT_QUOTES, 'UTF-8'); ?></a></td>
     	<td><?php echo $dnn2['replies']; ?></td>
 <?php
 if(isset($_SESSION['username']) and $_SESSION['username']==$admin)
 {
 ?>
-    	<td><a href="delete_topic.php?id=<?php echo $dnn2['id']; ?>"><img src="<?php echo $design; ?>/images/delete.png" alt="Delete" /></a></td>
+    	<td><a id="forum_a" href="delete_topic.php?id=<?php echo $dnn2['id']; ?>"><img src="<?php echo $design; ?>/images/delete.png" alt="Delete" /></a></td>
 <?php
 }
 ?>
@@ -106,14 +123,14 @@ else
 if(isset($_SESSION['username']))
 {
 ?>
-	<a href="new_topic.php?parent=<?php echo $id; ?>" class="button">New Topic</a>
+	<a id="forum_a" href="new_topic.php?parent=<?php echo $id; ?>" class="button">New Topic</a>
 <?php
 }
 else
 {
 ?>
 <div class="box_login">
-	<form action="login.php" method="post">
+	<form id="forum_form" action="login.php" method="post">
 		<label for="username">Username</label><input type="text" name="username" id="username" /><br />
 		<label for="password">Password</label><input type="password" name="password" id="password" /><br />
         <label for="memorize">Remember</label><input type="checkbox" name="memorize" id="memorize" value="yes" />
@@ -126,6 +143,8 @@ else
 }
 ?>
 		</div>
+		</span>
+		<script type='text/javascript' src='/profile/scripts/footer.js'></script>
 	</body>
 </html>
 <?php
