@@ -5,7 +5,8 @@ header('Content-type: text/html;charset=UTF-8');
 if(!isset($_SESSION['username']) and isset($_COOKIE['username'], $_COOKIE['password']))
 {
 	try {
-		$cnn = $db->query('select password,id from users where username="'.$_COOKIE['username'].'"');
+		$cnn = $db->prepare('select password,id from users where username=:username');
+		$cnn->execute(array(':username' => $_COOKIE['username']));
 		$dn_cnn = $cnn->fetch();
 	} catch (PDOException $e) {
 		echo $e->getMessage();

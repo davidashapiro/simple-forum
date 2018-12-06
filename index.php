@@ -29,48 +29,19 @@ include('config.php');
 		<span>
 	        <div class="content">
 			<?php
-			if(isset($_SESSION['username']))
+			include 'showtoprightbox.php';
+			$breadcrumbs = '<a id="forum_a" href="index.php">Forum Index</a>';
+			if (isset($_SESSION['loggedin']))
 			{
-				try {
-					$stmt = $db->prepare('select count(*) as nb_new_pm from pm where ((user1=:user1 and user1read="no") or (user2=:user2 and user2read="no")) and id2="1"');
-					$stmt->execute(array(':user1' => $_SESSION['userid'],
-										':user2' => $_SESSION['userid']));
-					$nb_new_pm = $stmt->fetch();
-				}
-				catch (PDOException $e) {
-					echo $e->getMessage();
-				}
-				$nb_new_pm = $nb_new_pm['nb_new_pm'];
-			?>
-				<div class="box">
-					<div class="box_left">
-				    	<a id="forum_a" href="<?php echo $url_home; ?>">Forum Index</a>
-				    </div>
-					<div class="box_right">
-				    	<a id="forum_a" href="list_pm.php">Your messages(<?php echo $nb_new_pm; ?>)</a> - 
-				    	<a id="forum_a" href="profile.php?id=<?php echo $_SESSION['userid']; ?>">
-				    	<?php echo htmlentities($_SESSION['username'], ENT_QUOTES, 'UTF-8'); ?></a> 
-				    	(<a id="forum_a" href="login.php">Logout</a>)
-				    </div>
-					<div class="clean"></div>
-				</div>
-				<?php
+				showtopleftbox($breadcrumbs);
+				showtoprightbox($db);
+				//echo 'logged in is set';
 			}
-			else
-			{
-			?>
-				<div class="box">
-					<div class="box_left">
-				    	<a id="forum_a" href="<?php echo $url_home; ?>">Forum Index</a>
-				    </div>
-					<div class="box_right">
-				    	<a id="forum_a" href="signup.php">Sign Up</a> - 
-				    	<a id="forum_a" href="login.php">Login</a>
-				    </div>
-					<div class="clean"></div>
-				</div>
+			else {
+				shownotloggedintoprightbox();
+				//echo 'loggedin is not set';
+			} ?>
 			<?php
-			}
 			if(isset($_SESSION['username']) and $_SESSION['username']==$admin)
 			{
 			?>
@@ -140,20 +111,7 @@ include('config.php');
 			if(!isset($_SESSION['username']))
 			{
 			?>
-				<div class="box_login">
-					<form id="forum_form" action="login.php" method="post">
-						<label for="username">Username</label>
-						<input type="text" name="username" id="username" /><br />
-						<label for="password">Password</label>
-						<input type="password" name="password" id="password" /><br />
-			        	<label for="memorize">Remember</label>
-			        	<input type="checkbox" name="memorize" id="memorize" value="yes" />
-			        	<div class="center">
-				        	<input type="submit" value="Login" /> 
-				        	<input type="button" onclick="javascript:document.location='signup.php';" value="Sign Up" />
-			        	</div>
-			    	</form>
-				</div>
+			
 			<?php
 			}
 			?>
