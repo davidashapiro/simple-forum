@@ -15,6 +15,11 @@ if(!isset($_SESSION['username']) and isset($_COOKIE['username'], $_COOKIE['passw
 	{
 		$_SESSION['username'] = $_COOKIE['username'];
 		$_SESSION['userid'] = $dn_cnn['id'];
+		$_SESSION['memberID'] = $dn_cnn['id'];
+		$_SESSION['loggedin'] = true;
 	}
 }
+//else if ($_SESSION['loggedin'] == false) {
+	//header('location: login.php');
+//}
 ?>

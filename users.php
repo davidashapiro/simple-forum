@@ -29,44 +29,18 @@ include('config.php');
 		<span>
         	<div class="content">
 				<?php
-				if(isset($_SESSION['username']))
+				include 'showtoprightbox.php';
+				$breadcrumbs = '<a id="forum_a" href="index.php">Forum Index</a>'.'&nbsp;&gt; <a id="forum_a" href="users.php">List of all users</a>';
+				if (isset($_SESSION['loggedin']))
 				{
-					try {
-						$stmt = $db->prepare('select count(*) as nb_new_pm from pm where ((user1=:user1 and user1read="no") or (user2=:user2 and user2read="no")) and id2="1"');
-						$stmt->execute(array(':user1' => $_SESSION['userid'],
-											':user2' => $_SESSION['userid']));
-						$nb_new_pm = $stmt->fetch();
-					} catch (PDOException $e) {
-						echo $e->getMessage();
-					}
-					$nb_new_pm = $nb_new_pm['nb_new_pm'];
-				?>
-					<div class="box">
-						<div class="box_left">
-					    	<a id="forum_a" href="<?php echo $url_home; ?>">Forum Index</a> &gt; List of all the users
-					    </div>
-						<div class="box_right">
-					    	<a id="forum_a" href="list_pm.php">Your messages(<?php echo $nb_new_pm; ?>)</a> - <a id="forum_a" href="profile.php?id=<?php echo $_SESSION['userid']; ?>"><?php echo htmlentities($_SESSION['username'], ENT_QUOTES, 'UTF-8'); ?></a> (<a id="forum_a" href="login.php">Logout</a>)
-					    </div>
-					    <div class="clean"></div>
-					</div>
-				<?php
+					showtopleftbox($breadcrumbs);
+					showtoprightbox($db);
+					//echo 'logged in is set';
 				}
-				else
-				{
-				?>
-					<div class="box">
-						<div class="box_left">
-					    	<a id="forum_a" href="<?php echo $url_home; ?>">Forum Index</a> &gt; List of all the users
-					    </div>
-						<div class="box_right">
-					    	<a id="forum_a" href="signup.php">Sign Up</a> - <a id="forum_a" href="login.php">Login</a>
-					    </div>
-					    <div class="clean"></div>
-					</div>
-				<?php
-				}
-				?>
+				else {
+					shownotloggedintoprightbox();
+					//echo 'loggedin is not set';
+				} ?>
 				This is the list of all the users:
 				<table id="forum_table" >
 				    <tr>
