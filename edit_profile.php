@@ -133,12 +133,13 @@ include('config.php');
 						$avatar = htmlentities($dnn['avatar'], ENT_QUOTES, 'UTF-8');
 					}
 					?>
+					<div class="box_login">
 				    <form id="forum_form" action="edit_profile.php" method="post">
 				        You can edit your informations:<br />
 				        <div class="center">
 				            <label for="username">Username</label>
 				            <input type="text" name="username" id="username" value="<?php echo $username; ?>" /><br />
-				            <label for="password">Password<span class="small">(6 characters min.)</span></label>
+				            <label for="password">Password<span class="small">(6 chars min.)</span></label>
 				            <input type="password" name="password" id="password" value="<?php echo $password; ?>"/><br />
 				            <label for="passverif">Password<span class="small">(verification)</span></label>
 				            <input type="password" name="passverif" id="passverif" value="<?php echo $password; ?>" /><br />
@@ -149,6 +150,7 @@ include('config.php');
 				            <input type="submit" value="Submit" />
 				        </div>
 				    </form>
+				    </div>
 				<?php } ?>
 			</div>
 		</span>

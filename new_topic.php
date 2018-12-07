@@ -85,7 +85,7 @@ if(isset($_GET['parent']))
 				else
 				{
 				?>
-					<form action="new_topic.php?parent=<?php echo $id; ?>" method="post">
+					<form id="forum_form" action="new_topic.php?parent=<?php echo $id; ?>" method="post">
 						<label for="title">Title</label>
 						<input type="text" name="title" id="title" width="80" /><br />
 					    <label for="message">Message</label><br />

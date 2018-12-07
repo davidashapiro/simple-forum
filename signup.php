@@ -116,6 +116,7 @@ if($form)
 				shownotloggedintoprightbox(); ?>
 				
 			</div>
+			<div class="box_login">
 		    <form id="forum_form" action="signup.php" method="post">
 		        Please fill this form to sign up:<br />
 		        <div class="center">
@@ -132,6 +133,7 @@ if($form)
 		            <input type="submit" value="Sign Up" />
 				</div>
 		    </form>
+		    </div>
 		</div>
 <?php
 }
