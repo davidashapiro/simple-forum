@@ -69,18 +69,15 @@ if(isset($_SESSION['username']))
 					{
 						$message = stripslashes($message);
 					}
-					$message = nl2br(htmlentities($message, ENT_QUOTES, 'UTF-8'));
+					$message = nl2br(strip_tags(htmlentities($message, ENT_QUOTES, 'UTF-8')));
 					if($db->query('insert into pm (id, id2, title, user1, user2, message, timestamp, user1read, user2read)values("'.$id.'", "'.(intval($req2->rowCount())+1).'", "", "'.$_SESSION['userid'].'", "", "'.$message.'", "'.time().'", "", "")') and $db->query('update pm set user'.$user_partic.'read="yes" where id="'.$id.'" and id2="1"'))
 					{
-					?>
-						<div class="message">Your reply has successfully been sent.<br />
-						<a id="forum_a" href="read_pm.php?id=<?php echo $id; ?>">Go to the PM</a></div>
-					<?php
+						header('location: read_pm.php?id='.$id);
 					}
 					else
 					{
 					?>
-						<div class="message">An error occurred while sending the reply.<br />
+						<div class="box_error">An error occurred while sending the reply.<br />
 						<a id="forum_a" href="read_pm.php?id=<?php echo $id; ?>">Go to the PM</a></div>
 					<?php
 					}
@@ -124,9 +121,9 @@ if(isset($_SESSION['username']))
 							<?php echo $dn2['username']; ?></a>
 						</td>
     					<td class="left">
-    						<div class="date">Date sent: <?php echo date('Y/m/d H:i:s' ,					$dn2['timestamp']); ?>
+    						<div class="date">Date sent: <?php echo date('m/d/Y H:i:s' ,	$dn2['timestamp']); ?>
     						</div>
-    						<?php echo $dn2['message']; ?>
+    						<?php echo strip_tags($dn2['message']); ?>
     					</td>
     				</tr>
 					<?php } ?>

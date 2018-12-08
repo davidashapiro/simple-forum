@@ -64,7 +64,7 @@ while($dn1 = $req1->fetch())
     	<td class="left"><a id="forum_a" href="read_pm.php?id=<?php echo $dn1['id']; ?>"><?php echo htmlentities($dn1['title'], ENT_QUOTES, 'UTF-8'); ?></a></td>
     	<td><?php echo $dn1['reps']-1; ?></td>
     	<td><a id="forum_a" href="profile.php?id=<?php echo $dn1['userid']; ?>"><?php echo htmlentities($dn1['username'], ENT_QUOTES, 'UTF-8'); ?></a></td>
-    	<td><?php echo date('d/m/Y H:i:s' ,$dn1['timestamp']); ?></td>
+    	<td><?php echo date('m/d/Y H:i:s' ,$dn1['timestamp']); ?></td>
     </tr>
 <?php
 }
@@ -95,7 +95,7 @@ while($dn2 = $req2->fetch())
     	<td class="left"><a id="forum_a" href="read_pm.php?id=<?php echo $dn2['id']; ?>"><?php echo htmlentities($dn2['title'], ENT_QUOTES, 'UTF-8'); ?></a></td>
     	<td><?php echo $dn2['reps']-1; ?></td>
     	<td><a id="forum_a" href="profile.php?id=<?php echo $dn2['userid']; ?>"><?php echo htmlentities($dn2['username'], ENT_QUOTES, 'UTF-8'); ?></a></td>
-    	<td><?php echo date('d/m/Y H:i:s' ,$dn2['timestamp']); ?></td>
+    	<td><?php echo date('m/d/Y H:i:s' ,$dn2['timestamp']); ?></td>
     </tr>
 <?php
 }

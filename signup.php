@@ -28,7 +28,7 @@ include('config.php');
 		<script type='text/javascript' src='/profile/scripts/header_part3.js'></script>
 		<span>
 <?php
-if(isset($_POST['username'], $_POST['password'], $_POST['passverif'], $_POST['email'], $_POST['avatar']) and $_POST['username']!='')
+if(isset($_POST['username'], $_POST['password'], $_POST['passverif'], $_POST['email'], $_POST['avatar']))
 {
 	if(get_magic_quotes_gpc())
 	{
@@ -38,65 +38,73 @@ if(isset($_POST['username'], $_POST['password'], $_POST['passverif'], $_POST['em
 		$_POST['email'] = stripslashes($_POST['email']);
 		$_POST['avatar'] = stripslashes($_POST['avatar']);
 	}
-	if($_POST['password']==$_POST['passverif'])
+	if ($_POST['username']!='' and $_POST['password'] != '' and $_POST['email'] != '')
 	{
-		if(strlen($_POST['password'])>=6)
+		if($_POST['password']==$_POST['passverif'])
 		{
-			if(preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i',$_POST['email']))
+			if(strlen($_POST['password'])>=6)
 			{
-				$username = $_POST['username'];
-				$password = sha1($_POST['password']);
-				$email = $_POST['email'];
-				$avatar = $_POST['avatar'];
-				try 
+				if(preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i',$_POST['email']))
 				{
-					$stmt = $db->query('select id from users where username="'.$username.'"');
-					$dn = $stmt->rowCount();
-					if($dn==0)
+					$username = $_POST['username'];
+					$password = sha1($_POST['password']);
+					$email = $_POST['email'];
+					$avatar = $_POST['avatar'];
+					try 
 					{
-						$stmt = $db->query('select id from users');
-						$dn2 = $stmt->rowCount();
-						$id = $dn2+1;
-						
-						$stmt = $db->query('insert into users(id, username, password, email, avatar, signup_date) values ('.$id.', "'.$username.'", "'.$password.'", "'.$email.'", "'.$avatar.'", "'.time().'")');
-						if(isset($stmt))
+						$stmt = $db->query('select id from users where username="'.$username.'"');
+						$dn = $stmt->rowCount();
+						if($dn==0)
 						{
-							$form = false;
-							header('location: login.php');
+							$stmt = $db->query('select id from users');
+							$dn2 = $stmt->rowCount();
+							$id = $dn2+1;
+							
+							$stmt = $db->query('insert into users(id, username, password, email, avatar, signup_date) values ('.$id.', "'.$username.'", "'.$password.'", "'.$email.'", "'.$avatar.'", "'.time().'")');
+							if(isset($stmt))
+							{
+								$form = false;
+								header('location: login.php');
+							}
+							else
+							{
+								$form = true;
+								$message = 'An error occurred while signing you up.';
+							}
 						}
 						else
 						{
 							$form = true;
-							$message = 'An error occurred while signing you up.';
+							$message = 'Another user already use this username.';
 						}
-					}
-					else
+					} 
+					catch (PDOException $e) 
 					{
-						$form = true;
-						$message = 'Another user already use this username.';
+						echo $e->getMessage();
 					}
-				} 
-				catch (PDOException $e) 
+				}
+				else
 				{
-					echo $e->getMessage();
+					$form = true;
+					$message = 'The email you typed is not valid.';
 				}
 			}
 			else
 			{
 				$form = true;
-				$message = 'The email you typed is not valid.';
+				$message = 'Your password must have a minimum of 6 characters.';
 			}
 		}
 		else
 		{
 			$form = true;
-			$message = 'Your password must have a minimum of 6 characters.';
+			$message = 'The passwords you entered are not identical.';
 		}
 	}
-	else
+	else 
 	{
+		$message = 'Please enter all required fields.';
 		$form = true;
-		$message = 'The passwords you entered are not identical.';
 	}
 }
 else
@@ -107,7 +115,7 @@ if($form)
 {
 	if(isset($message))
 	{
-		echo '<div class="message">'.$message.'</div>';
+		echo '<div class="box_error">'.$message.'</div>';
 	}
 ?>
 			<div class="content">
@@ -120,17 +128,18 @@ if($form)
 		    <form id="forum_form" action="signup.php" method="post">
 		        Please fill this form to sign up:<br />
 		        <div class="center">
-		            <label for="username">Username</label>
+		            <label for="username">Username *</label>
 		            <input type="text" name="username" value="<?php if(isset($_POST['username'])){echo htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');} ?>" /><br />
-		            <label for="password">Password<span class="small">(6 characters min.)</span></label>
+		            <label for="password">Password *<span class="small">(6 characters min.)</span></label>
 		            <input type="password" name="password" /><br />
 		            <label for="passverif">Password<span class="small">(verification)</span></label>
 		            <input type="password" name="passverif" /><br />
-		            <label for="email">Email</label>
+		            <label for="email">Email *</label>
 		            <input type="text" name="email" value="<?php if(isset($_POST['email'])){echo htmlentities($_POST['email'], ENT_QUOTES, 'UTF-8');} ?>" /><br />
 		            <label for="avatar">Avatar<span class="small">(optional)</span></label>
 		            <input type="text" name="avatar" value="<?php if(isset($_POST['avatar'])){echo htmlentities($_POST['avatar'], ENT_QUOTES, 'UTF-8');} ?>" /><br />
 		            <input type="submit" value="Sign Up" />
+		            <input type="button" onclick="javascript:document.location='index.php';" value="cancel" />
 				</div>
 		    </form>
 		    </div>

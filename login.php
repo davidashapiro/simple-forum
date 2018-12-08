@@ -82,7 +82,7 @@ include('config.php');
 	{
 		if(isset($message))
 		{
-			echo '<div class="message">'.$message.'</div>';
+			echo '<div class="box_error">'.$message.'</div>';
 		}
 ?>
 			<div class="content">

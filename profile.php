@@ -81,7 +81,7 @@ include('config.php');
 	    							<td class="left">
 	    								<h1><?php echo htmlentities($dnn['username'], ENT_QUOTES, 'UTF-8'); ?></h1>
 	    								Email: <a id="forum_a" href="<?php echo htmlentities($dnn['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlentities($dnn['email'], ENT_QUOTES, 'UTF-8'); ?></a><br />
-	        							This user joined the website on <?php echo date('Y/m/d',$dnn['signup_date']); ?>
+	        							This user joined the website on <?php echo date('m/d/Y',$dnn['signup_date']); ?>
 	        						</td>
 								</tr>
 							</table>

@@ -68,7 +68,7 @@ if(isset($_GET['id']))
 				else
 				{
 				?>
-					<form action="delete_topic.php?id=<?php echo $id; ?>" method="post">
+					<form id="forum_form" action="delete_topic.php?id=<?php echo $id; ?>" method="post">
 						Are you sure you want to delete this topic?
     					<input type="hidden" name="confirm" value="true" />
     					<input type="submit" value="Yes" /> 

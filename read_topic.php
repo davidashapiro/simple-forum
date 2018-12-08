@@ -77,7 +77,7 @@ if(isset($_GET['id']))
 						</td>
     					<td class="left">
 				    		
-				    			<div class="date">Date sent: <?php echo date('Y/m/d H:i:s' ,$dnn2['timestamp']); ?>
+				    			<div class="date">Date sent: <?php echo date('m/d/Y H:i:s' ,$dnn2['timestamp']); ?>
 				    			</div>
 				    			<div class="clean"></div>
     							<?php echo $dnn2['message']; ?>
