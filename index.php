@@ -29,7 +29,7 @@ include('config.php');
 				//echo 'loggedin is not set';
 			} ?>
 			<?php
-			if(isset($_SESSION['username']) and $_SESSION['username']==$admin)
+			if(isset($_SESSION['user_level']) and $_SESSION['user_level']==$admin)
 			{
 			?>
 				<a id="forum_a" href="new_category.php" class="button">New Category</a>
@@ -42,7 +42,7 @@ include('config.php');
     				<th class="forum_ntop">Topics</th>
     				<th class="forum_nrep">Replies</th>
 			<?php
-			if(isset($_SESSION['username']) and $_SESSION['username']==$admin)
+			if(isset($_SESSION['user_level']) and $_SESSION['user_level']==$admin)
 			{
 			?>
 			    	<th class="forum_act">Action</th>
@@ -65,7 +65,7 @@ include('config.php');
     				<td><?php echo $dnn1['topics']; ?></td>
     				<td><?php echo $dnn1['replies']; ?></td>
 					<?php
-					if(isset($_SESSION['username']) and $_SESSION['username']==$admin)
+					if(isset($_SESSION['user_level']) and $_SESSION['user_level']==$admin)
 					{
 					?>
     					<td><a id="forum_a" href="delete_category.php?id=<?php echo $dnn1['id']; ?>">
@@ -89,7 +89,7 @@ include('config.php');
 				} ?>
 			</table>
 			<?php
-			if(isset($_SESSION['username']) and $_SESSION['username']==$admin)
+			if(isset($_SESSION['user_level']) and $_SESSION['user_level']==$admin)
 			{
 			?>
 				<a id="forum_a" href="new_category.php" class="button">New Category</a>
@@ -97,9 +97,6 @@ include('config.php');
 			}
 			if(!isset($_SESSION['username']))
 			{
-			?>
-			
-			<?php
 			}
 			?>
 			</div>

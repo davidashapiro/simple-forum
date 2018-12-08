@@ -46,7 +46,7 @@ if(isset($_GET['parent']))
     						<th class="forum_tops">Topic</th>
     						<th class="forum_auth">Author</th>
     						<th class="forum_nrep">Replies</th>
-							<?php if(isset($_SESSION['username']) and $_SESSION['username']==$admin) { ?>
+							<?php if(isset($_SESSION['user_level']) and ($_SESSION['user_level']==$admin or $_SESSION['user_level'] == $moderator)) { ?>
     							<th class="forum_act">Action</th>
 							<?php } ?>
 						</tr>
@@ -61,7 +61,7 @@ if(isset($_GET['parent']))
     							<?php echo htmlentities($dnn2['author'], ENT_QUOTES, 'UTF-8'); ?></a>
     						</td>
     						<td><?php echo $dnn2['replies']; ?></td>
-							<?php if(isset($_SESSION['username']) and $_SESSION['username']==$admin) { ?>
+							<?php if(isset($_SESSION['user_level']) and ($_SESSION['user_level']==$admin or $_SESSION['user_level'] == $moderator)) { ?>
     							<td>
     								<a id="forum_a" href="delete_topic.php?id=<?php echo $dnn2['id']; ?>">
     									<img src="<?php echo $design; ?>/images/delete.png" alt="Delete" /></a>

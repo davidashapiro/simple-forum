@@ -34,9 +34,9 @@ if(isset($_POST['username'], $_POST['password'], $_POST['passverif'], $_POST['em
 			{
 				if(preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i',$_POST['email']))
 				{
-					$username = $_POST['username'];
+					$username = strtolower($_POST['username']);
 					$password = sha1($_POST['password']);
-					$email = $_POST['email'];
+					$email = strtolower($_POST['email']);
 					$avatar = $_POST['avatar'];
 					$user_level = $_POST['user_level'];
 					try 
@@ -46,12 +46,7 @@ if(isset($_POST['username'], $_POST['password'], $_POST['passverif'], $_POST['em
 						$dn = $stmt->rowCount();
 						if($dn==0)
 						{
-							$stmt = $db->prepare('select id from users');
-							$stmt->execute();
-							$dn2 = $stmt->rowCount();
-							$id = $dn2+1;
-							
-							$stmt = $db->query('insert into users(id, username, password, email, avatar, signup_date, user_level) values ('.$id.', "'.$username.'", "'.$password.'", "'.$email.'", "'.$avatar.'", "'.time().'", "'.$user_level.'")');
+							$stmt = $db->query('insert into users(username, password, email, avatar, signup_date, user_level) values ("'.$username.'", "'.$password.'", "'.$email.'", "'.$avatar.'", "'.time().'", "'.$user_level.'")');
 							if(isset($stmt))
 							{
 								$form = false;

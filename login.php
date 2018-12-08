@@ -34,7 +34,7 @@ if (isset($_GET['page'])) {
 		}
 		try 
 		{
-			$stmt = $db->prepare('select password,id from users where username=:username');
+			$stmt = $db->prepare('select password,id,user_level from users where username=:username');
 			$stmt->execute(array(':username' => $username));
 			$dn = $stmt->fetch();
 			$rows = $stmt->rowCount();
@@ -42,10 +42,11 @@ if (isset($_GET['page'])) {
 			if($dn['password']==sha1($password) and $rows > 0)
 			{
 				$form = false;
-				$_SESSION['username'] = $_POST['username'];
+				$_SESSION['username'] = strtolower($_POST['username']);
 				$_SESSION['userid'] = $dn['id'];
 				$_SESSION['loggedin'] = true;
 		    	$_SESSION['memberID'] = $dn['id'];
+		    	$_SESSION['user_level'] = $dn['user_level'];
 		    	
 				if(isset($_POST['memorize']) and $_POST['memorize']=='yes')
 				{

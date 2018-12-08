@@ -8,9 +8,9 @@ work correctly.
 
 //database credentials
 define('DBHOST','localhost');
-define('DBUSER','davidsh2_forum');
-define('DBPASS','Dima61949');
-define('DBNAME','davidsh2_phpb393');
+define('DBUSER','root');
+define('DBPASS','');
+define('DBNAME','simple_blog');
 //We log to the DataBase
 try {
 	$db = new PDO("mysql:host=".DBHOST.";port=3306;dbname=".DBNAME, DBUSER, DBPASS);
@@ -22,8 +22,9 @@ try {
 //set timezone
 date_default_timezone_set('America/Chicago');
 
-//Username of the Administrator
-$admin='dim';
+//User_level of the Administrator
+$admin=2;
+$moderator=1;
 
 /******************************************************
 -----------------Optional Configuration----------------

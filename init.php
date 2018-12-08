@@ -2,10 +2,10 @@
 //This page let initialize the forum by checking for example if the user is logged
 session_start();
 header('Content-type: text/html;charset=UTF-8');
-if(!isset($_SESSION['username']) and isset($_COOKIE['username'], $_COOKIE['password']))
+if(!isset($_SESSION['username'], $_SESSION['loggedin']) and isset($_COOKIE['username'], $_COOKIE['password']))
 {
 	try {
-		$cnn = $db->prepare('select password,id from users where username=:username');
+		$cnn = $db->prepare('select password,id,user_level from users where username=:username');
 		$cnn->execute(array(':username' => $_COOKIE['username']));
 		$dn_cnn = $cnn->fetch();
 	} catch (PDOException $e) {
@@ -13,13 +13,19 @@ if(!isset($_SESSION['username']) and isset($_COOKIE['username'], $_COOKIE['passw
 	}
 	if(sha1($dn_cnn['password'])==$_COOKIE['password'] and $cnn->rowCount() > 0)
 	{
-		$_SESSION['username'] = $_COOKIE['username'];
+		$_SESSION['username'] = strtolower($_COOKIE['username']);
 		$_SESSION['userid'] = $dn_cnn['id'];
 		$_SESSION['memberID'] = $dn_cnn['id'];
 		$_SESSION['loggedin'] = true;
+		$_SESSION['user_level'] = $dn_cnn['user_level'];
 	}
 }
-//else if ($_SESSION['loggedin'] == false) {
-	//header('location: login.php');
-//}
+
+function is_logged_in()
+{
+	if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true)
+	{
+		return true;
+	}
+}
 ?>
