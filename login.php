@@ -1,5 +1,8 @@
 <?php
 include('config.php');
+if (isset($_GET['page'])) {
+	$page = $_GET['page'];
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -30,6 +33,7 @@ include('config.php');
 	$ousername = '';
 	if(isset($_POST['username'], $_POST['password']))
 	{
+		$page = $_POST['page'];
 		if(get_magic_quotes_gpc())
 		{
 			$ousername = stripslashes($_POST['username']);
@@ -62,7 +66,11 @@ include('config.php');
 					setcookie('username', $_POST['username'], $one_year);
 					setcookie('password', sha1($password), $one_year);
 				}
-				header('location: index.php');
+				if ($page == 'blog') {
+					header('location: /simple-blog/admin/index.php');
+				} else {
+					header('location: /simple-forum/index.php');
+				}
 			}
 			else
 			{
@@ -88,6 +96,7 @@ include('config.php');
 			<div class="content">
     			<div class="box_login">
 					<form id="forum_form" action="login.php" method="post">
+						<input type="hidden" name="page" value="<?php echo $page ?>" />
 						<label for="username">Username</label>
 						<input type="text" name="username" id="username" /><br />
 						<label for="password">Password</label>

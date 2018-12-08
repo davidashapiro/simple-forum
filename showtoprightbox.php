@@ -42,7 +42,7 @@ function shownotloggedintoprightbox() {
 	    </div>
 		<div class="box_right">
 	    	<a id="forum_a" href="signup.php">Sign Up</a> - 
-	    	<a id="forum_a" href="login.php">Login</a>
+	    	<a id="forum_a" href="login.php?page=forum">Login</a>
 	    </div>
 		<div class="clean"></div>
 	</div>
