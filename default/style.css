@@ -17,6 +17,7 @@ a#forum_a
 {
 	text-decoration:none;
 	color:#0099cc;
+	font-size: 14px;
 }
 a:hover
 {
@@ -52,12 +53,31 @@ form#forum_form input[type=submit],
 form#forum_form input[type=button]
 {
 	width: auto;
+	display: inline-block;
+	border: 1px solid #000;
+	background: #008CBA;
+	color: #ffffff;
+	padding: 10px 20px 10px 20px;
+	margin-top: 30px;
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+}
+form#forum_form input[type=submit]:hover,
+form#forum_form input[type=button]:hover
+{
+	color: black;
+	background: white;
 }
 form#forum_form input[type=text], 
 form#forum_form input[type=password]
 {
 	width:60%;
 	display: inline-block;
+	border: none;
+	background: #666;
+	color: white;
+	height: 20px;
+	font-size: 14px;
 }
 form#forum_form textarea {
 	width: 90%;
@@ -165,6 +185,8 @@ table#forum_table td, table#forum_table th
 	margin:auto;
 	padding:5px;
 	margin-bottom:15px;
+	border: 1px solid #eee;
+	background: #eee;
 }
 .login
 {
@@ -181,8 +203,44 @@ table#forum_table td, table#forum_table th
 	border-radius:10px;
 	margin:auto;
 	padding:20px;
-	margin-top:20px;
+	margin-top:0px;
 	color:white;
+}
+.box_error {
+	background: #f44336;
+	color: #ffffff;
+	padding: 20px 40px 20px 40px;
+	margin: 10px;
+	width: auto;
+	border-radius: 20px;
+	font-size: 16px;
+}
+.box_login input[type=text], 
+.box_login input[type=password]
+{
+	border: none;
+	background: #666;
+	color: white;
+	height: 20px;
+	font-size: 14px;
+}
+.box_login input[type=submit], 
+.box_login input[type=button]
+{
+	display: inline-block;
+	border: 1px solid #000;
+	background: #008CBA;
+	color: #ffffff;
+	padding: 10px 20px 10px 20px;
+	margin-top: 30px;
+	-webkit-transition-duration: 0.4s; /* Safari */
+	transition-duration: 0.4s;
+}
+.box_login input[type=submit]:hover, 
+.box_login input[type=button]:hover
+{
+	color: black;
+	background: white;
 }
 /*****************************************************/
 /****Content****/
