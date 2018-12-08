@@ -8,7 +8,7 @@ if(isset($_GET['id']))
 	$dn1 = $stmt->fetch();
 	if($dn1['nb1']>0)
 	{
-		if(isset($_SESSION['username']) and $_SESSION['username']==$admin)
+		if(isset($_SESSION['user_level']) and $_SESSION['user_level']==$admin)
 		{
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
