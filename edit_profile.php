@@ -5,20 +5,7 @@ include('config.php');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
-    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
-    	<link href='/profile/css/styles.css' rel='stylesheet' type='text/css'>
-    	<script src="/profile/scripts/scrolltop.js" type="text/javascript"></script>
-    	<script language='Javascript' type='text/javascript'>
-			var topmenu = 5;
-			var rightmenu = 0;
-		</script>
-        <link href="<?php echo $design; ?>/style.css" rel="stylesheet" title="Style" />
+        <?php include 'header0.php'; ?>
         <title>Edit your profile</title>
     </head>
     <body id="forum_body" >
@@ -48,6 +35,7 @@ include('config.php');
 						$_POST['passverif'] = stripslashes($_POST['passverif']);
 						$_POST['email'] = stripslashes($_POST['email']);
 						$_POST['avatar'] = stripslashes($_POST['avatar']);
+						$_POST['user_level'] = intval($_POST['user_level']);
 					}
 					if($_POST['password']==$_POST['passverif'])
 					{
@@ -59,6 +47,7 @@ include('config.php');
 								$password = sha1($_POST['password']);
 								$email = $_POST['email'];
 								$avatar = $_POST['avatar'];
+								$user_level = $_POST['user_level'];
 								$stmt = $db->query('select count(*) as nb from users where username="'.$username.'"');
 								$dn = $stmt->fetch();
 								if($dn['nb']==0 or $_POST['username']==$_SESSION['username'])
@@ -137,6 +126,7 @@ include('config.php');
 				    <form id="forum_form" action="edit_profile.php" method="post">
 				        You can edit your informations:<br />
 				        <div class="center">
+				        	<input type="hidden" name="user_level" value="<?php echo $user_level; ?>" />
 				            <label for="username">Username</label>
 				            <input type="text" name="username" id="username" value="<?php echo $username; ?>" /><br />
 				            <label for="password">Password<span class="small">(6 chars min.)</span></label>
