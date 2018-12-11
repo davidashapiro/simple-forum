@@ -1,18 +1,90 @@
 <?php
 //This page let an user edit his profile
 include('config.php');
+if(isset($_POST['username'], $_POST['password'], $_POST['passverif'], $_POST['email'], $_POST['avatar']))
+{
+	if(get_magic_quotes_gpc())
+	{
+		$_POST['username'] = strtolower(stripslashes($_POST['username']));
+		$_POST['password'] = stripslashes($_POST['password']);
+		$_POST['passverif'] = stripslashes($_POST['passverif']);
+		$_POST['email'] = strtolower(tstripslashes($_POST['email']));
+		$_POST['avatar'] = stripslashes($_POST['avatar']);
+		$_POST['user_level'] = intval($_POST['user_level']);
+	}
+	if($_POST['password']==$_POST['passverif'])
+	{
+		if(strlen($_POST['password'])>=6)
+		{
+			if(preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i',$_POST['email']))
+			{
+				$username = $_POST['username'];
+				$password = sha1($_POST['password']);
+				$email = $_POST['email'];
+				$avatar = $_POST['avatar'];
+				$user_level = $_POST['user_level'];
+				$stmt = $db->query('select count(*) as nb from users where username="'.$username.'"');
+				$dn = $stmt->fetch();
+				if($dn['nb']==0 or $_POST['username']==$_SESSION['username'])
+				{
+					if($db->query('update users set username="'.$username.'", password="'.$password.'", email="'.$email.'", avatar="'.$avatar.'" where id="'.$_SESSION['userid'].'"'))
+					{
+						$form = false;
+						unset($_SESSION['username'], $_SESSION['userid'], $_SESSION['loggedin']);
+						header('location: login.php?page=forum');
+					}
+					else
+					{
+						$form = true;
+						$message = 'An error occured while editing your profile.';
+					}
+				}
+				else
+				{
+					$form = true;
+					$message = 'Another user already uses this username.';
+				}
+			}
+			else
+			{
+				$form = true;
+				$message = 'The email you typed is not valid.';
+			}
+		}
+		else
+		{
+			$form = true;
+			$message = 'Your password must have a minimum of 6 characters.';
+		}
+	}
+	else
+	{
+		$form = true;
+		$message = 'The passwords you entered are not identical.';
+	}
+}
+else
+{
+	$form = true;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?php include 'header0.php'; ?>
         <title>Edit your profile</title>
+    	<?php include '../profile/header0.php';
+		$topmenu = 5;
+		$rightmenu = 0;
+        echo '<link href="'.$design.'/style.css" rel="stylesheet" title="Style" />';
+        ?>
     </head>
-    <body id="forum_body" >
-    	<script type='text/javascript' src='/profile/scripts/header_part1.js'></script>
-		<script type='text/javascript' src='/profile/scripts/topmenu.js'></script>
-		<script type='text/javascript' src='/profile/scripts/header_part2.js'></script>
-		<script type='text/javascript' src='/profile/scripts/header_part3.js'></script>
+    <body id="forum_body">
+    	<?php 
+		include '../profile/header1.php';
+		include '../profile/topmenu.php';
+		include '../profile/header2.php';
+		include '../profile/header3.php';
+		?>
 		<span>
 			<div class="content">
 				<?php
@@ -26,72 +98,7 @@ include('config.php');
 				else {
 					shownotloggedintoprightbox();
 				} 
-				if(isset($_POST['username'], $_POST['password'], $_POST['passverif'], $_POST['email'], $_POST['avatar']))
-				{
-					if(get_magic_quotes_gpc())
-					{
-						$_POST['username'] = stripslashes($_POST['username']);
-						$_POST['password'] = stripslashes($_POST['password']);
-						$_POST['passverif'] = stripslashes($_POST['passverif']);
-						$_POST['email'] = stripslashes($_POST['email']);
-						$_POST['avatar'] = stripslashes($_POST['avatar']);
-						$_POST['user_level'] = intval($_POST['user_level']);
-					}
-					if($_POST['password']==$_POST['passverif'])
-					{
-						if(strlen($_POST['password'])>=6)
-						{
-							if(preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i',$_POST['email']))
-							{
-								$username = $_POST['username'];
-								$password = sha1($_POST['password']);
-								$email = $_POST['email'];
-								$avatar = $_POST['avatar'];
-								$user_level = $_POST['user_level'];
-								$stmt = $db->query('select count(*) as nb from users where username="'.$username.'"');
-								$dn = $stmt->fetch();
-								if($dn['nb']==0 or $_POST['username']==$_SESSION['username'])
-								{
-									if($db->query('update users set username="'.$username.'", password="'.$password.'", email="'.$email.'", avatar="'.$avatar.'" where id="'.$_SESSION['userid'].'"'))
-									{
-										$form = false;
-										unset($_SESSION['username'], $_SESSION['userid']);
-										header('location: login.php');
-									}
-									else
-									{
-										$form = true;
-										$message = 'An error occured while editing your profile.';
-									}
-								}
-								else
-								{
-									$form = true;
-									$message = 'Another user already uses this username.';
-								}
-							}
-							else
-							{
-								$form = true;
-								$message = 'The email you typed is not valid.';
-							}
-						}
-						else
-						{
-							$form = true;
-							$message = 'Your password must have a minimum of 6 characters.';
-						}
-					}
-					else
-					{
-						$form = true;
-						$message = 'The passwords you entered are not identical.';
-					}
-				}
-				else
-				{
-					$form = true;
-				}
+				
 				if($form)
 				{
 					if(isset($message))
@@ -144,6 +151,9 @@ include('config.php');
 				<?php } ?>
 			</div>
 		</span>
-		<script type='text/javascript' src='/profile/scripts/footer.js'></script>
+		<?php 
+			include '../profile/footer.php';
+			include '../profile/counter.php'; 
+		?>
 	</body>
 </html>

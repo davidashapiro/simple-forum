@@ -5,17 +5,23 @@ include('config.php');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?php include 'header0.php'; ?>
-        <title>Sign Up</title>
+    	<title>Sign Up</title>
+        <?php include '../profile/header0.php';
+		$topmenu = 5;
+		$rightmenu = 0;
+		echo '<link href="'.$design.'/style.css" rel="stylesheet" title="Style" />';
+		?>
     </head>
-    <body id="forum_body" >
-    	<script type='text/javascript' src='/profile/scripts/header_part1.js'></script>
-		<script type='text/javascript' src='/profile/scripts/topmenu.js'></script>
-		<script type='text/javascript' src='/profile/scripts/header_part2.js'></script>
-		<script type='text/javascript' src='/profile/scripts/header_part3.js'></script>
+    <body id="forum_body">
+    	<?php 
+		include '../profile/header1.php';
+		include '../profile/topmenu.php';
+		include '../profile/header2.php';
+		include '../profile/header3.php';
+		?>
 		<span>
 <?php
-if(isset($_POST['username'], $_POST['password'], $_POST['passverif'], $_POST['email'], $_POST['avatar']))
+if(isset($_POST['username'], $_POST['password'], $_POST['passverif'], $_POST['email'], $_POST['avatar']) and $_POST['username']!='')
 {
 	if(get_magic_quotes_gpc())
 	{
@@ -24,73 +30,66 @@ if(isset($_POST['username'], $_POST['password'], $_POST['passverif'], $_POST['em
 		$_POST['passverif'] = stripslashes($_POST['passverif']);
 		$_POST['email'] = stripslashes($_POST['email']);
 		$_POST['avatar'] = stripslashes($_POST['avatar']);
-		$_POST['user_level'] = intval($_POST['user_level']);
 	}
-	if ($_POST['username']!='' and $_POST['password'] != '' and $_POST['email'] != '')
+	if($_POST['password']==$_POST['passverif'])
 	{
-		if($_POST['password']==$_POST['passverif'])
+		if(strlen($_POST['password'])>=6)
 		{
-			if(strlen($_POST['password'])>=6)
+			if(preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i',$_POST['email']))
 			{
-				if(preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i',$_POST['email']))
+				$username = $_POST['username'];
+				$password = sha1($_POST['password']);
+				$email = $_POST['email'];
+				$avatar = $_POST['avatar'];
+				try 
 				{
-					$username = strtolower($_POST['username']);
-					$password = sha1($_POST['password']);
-					$email = strtolower($_POST['email']);
-					$avatar = $_POST['avatar'];
-					$user_level = $_POST['user_level'];
-					try 
+					$stmt = $db->query('select id from users where username="'.$username.'"');
+					$dn = $stmt->rowCount();
+					if($dn==0)
 					{
-						$stmt = $db->prepare('select id from users where username=:username');
-						$stmt->execute(array(':username' => $username));
-						$dn = $stmt->rowCount();
-						if($dn==0)
+						$stmt = $db->query('select id from users');
+						$dn2 = $stmt->rowCount();
+						$id = $dn2+1;
+						
+						$stmt = $db->query('insert into users(id, username, password, email, avatar, signup_date) values ('.$id.', "'.$username.'", "'.$password.'", "'.$email.'", "'.$avatar.'", "'.time().'")');
+						if(isset($stmt))
 						{
-							$stmt = $db->query('insert into users(username, password, email, avatar, signup_date, user_level) values ("'.$username.'", "'.$password.'", "'.$email.'", "'.$avatar.'", "'.time().'", "'.$user_level.'")');
-							if(isset($stmt))
-							{
-								$form = false;
-								header('location: login.php?page=forum');
-							}
-							else
-							{
-								$form = true;
-								$message = 'An error occurred while signing you up.';
-							}
+							$form = false;
+							header('location: login.php');
 						}
 						else
 						{
 							$form = true;
-							$message = 'Another user already use this username.';
+							$message = 'An error occurred while signing you up.';
 						}
-					} 
-					catch (PDOException $e) 
-					{
-						echo $e->getMessage();
 					}
-				}
-				else
+					else
+					{
+						$form = true;
+						$message = 'Another user already use this username.';
+					}
+				} 
+				catch (PDOException $e) 
 				{
-					$form = true;
-					$message = 'The email you typed is not valid.';
+					echo $e->getMessage();
 				}
 			}
 			else
 			{
 				$form = true;
-				$message = 'Your password must have a minimum of 6 characters.';
+				$message = 'The email you typed is not valid.';
 			}
 		}
 		else
 		{
 			$form = true;
-			$message = 'The passwords you entered are not identical.';
+			$message = 'Your password must have a minimum of 6 characters.';
 		}
 	}
-	else 
+	else
 	{
-		$message = 'Please enter all required fields.';
 		$form = true;
+		$message = 'The passwords you entered are not identical.';
 	}
 }
 else
@@ -101,40 +100,40 @@ if($form)
 {
 	if(isset($message))
 	{
-		echo '<div class="box_error">'.$message.'</div>';
+		echo '<div class="message">'.$message.'</div>';
 	}
 ?>
 			<div class="content">
 				<?php
 				include 'showtoprightbox.php';
 				shownotloggedintoprightbox(); ?>
-				
 			</div>
 			<div class="box_login">
-		    <form id="forum_form" action="signup.php" method="post">
-		        Please fill this form to sign up:<br />
-		        <div class="center">
-		        	<input type="hidden" name="user_level" value="0" />
-		            <label for="username">Username *</label>
-		            <input type="text" name="username" value="<?php if(isset($_POST['username'])){echo htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');} ?>" /><br />
-		            <label for="password">Password *<span class="small">(6 characters min.)</span></label>
-		            <input type="password" name="password" /><br />
-		            <label for="passverif">Password<span class="small">(verification)</span></label>
-		            <input type="password" name="passverif" /><br />
-		            <label for="email">Email *</label>
-		            <input type="text" name="email" value="<?php if(isset($_POST['email'])){echo htmlentities($_POST['email'], ENT_QUOTES, 'UTF-8');} ?>" /><br />
-		            <label for="avatar">Avatar<span class="small">(optional)</span></label>
-		            <input type="text" name="avatar" value="<?php if(isset($_POST['avatar'])){echo htmlentities($_POST['avatar'], ENT_QUOTES, 'UTF-8');} ?>" /><br />
-		            <input type="submit" value="Sign Up" />
-		            <input type="button" onclick="javascript:document.location='index.php';" value="cancel" />
-				</div>
-		    </form>
+			    <form id="forum_form" action="signup.php" method="post">
+			        Please fill this form to sign up:<br />
+			        <div class="center">
+			            <label for="username">Username</label>
+			            <input type="text" name="username" value="<?php if(isset($_POST['username'])){echo htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');} ?>" /><br />
+			            <label for="password">Password<span class="small">(6 characters min.)</span></label>
+			            <input type="password" name="password" /><br />
+			            <label for="passverif">Password<span class="small">(verification)</span></label>
+			            <input type="password" name="passverif" /><br />
+			            <label for="email">Email</label>
+			            <input type="text" name="email" value="<?php if(isset($_POST['email'])){echo htmlentities($_POST['email'], ENT_QUOTES, 'UTF-8');} ?>" /><br />
+			            <label for="avatar">Avatar<span class="small">(optional)</span></label>
+			            <input type="text" name="avatar" value="<?php if(isset($_POST['avatar'])){echo htmlentities($_POST['avatar'], ENT_QUOTES, 'UTF-8');} ?>" /><br />
+			            <input type="submit" value="Sign Up" />
+					</div>
+			    </form>
 		    </div>
 		</div>
 <?php
 }
 ?>
 		</span>
-		<script type='text/javascript' src='/profile/scripts/footer.js'></script>
+		<?php 
+			include '../profile/footer.php';
+			include '../profile/counter.php'; 
+		?>
 	</body>
 </html>

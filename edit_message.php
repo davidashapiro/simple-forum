@@ -14,46 +14,6 @@ if(isset($_GET['id'], $_GET['id2']))
 			if($_SESSION['userid']==$dn1['authorid'] or $_SESSION['username']==$admin)
 			{
 				include('bbcode_function.php');
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <?php include 'header0.php'; ?>
-		<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
-		<script>
-          tinymce.init({
-              selector: "textarea",
-              plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table contextmenu paste"
-              ],
-              toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-          });
-		</script>
-        <title>Edit a reply - <?php echo htmlentities($dn1['title'], ENT_QUOTES, 'UTF-8'); ?> - <?php echo htmlentities($dn1['name'], ENT_QUOTES, 'UTF-8'); ?> - Forum</title>
-		<script type="text/javascript" src="functions.js"></script>
-    </head>
-    <body id="forum_body" >
-    	<script type='text/javascript' src='/profile/scripts/header_part1.js'></script>
-		<script type='text/javascript' src='/profile/scripts/topmenu.js'></script>
-		<script type='text/javascript' src='/profile/scripts/header_part2.js'></script>
-		<script type='text/javascript' src='/profile/scripts/header_part3.js'></script>
-		<span>
-        	<div class="content">
-        		<?php
-				include 'showtoprightbox.php';
-				$breadcrumbs = '<a id="forum_a" href="index.php">Forum Index</a>&nbsp;'.'&gt;&nbsp;<a id="forum_a" href="list_topics.php?parent='.$dn1['parent'].'">'.htmlentities($dn1['name'], ENT_QUOTES, 'UTF-8').'</a>&nbsp;&gt;&nbsp;<a id="forum_a" href="read_topic.php?id='.$id. '">'.htmlentities($dn1['title'], ENT_QUOTES, 'UTF-8').'</a>&nbsp;&gt;&nbsp;Edit a reply';
-				if (isset($_SESSION['loggedin']))
-				{
-					showtopleftbox($breadcrumbs);
-					showtoprightbox($db);
-				}
-				else {
-					shownotloggedintoprightbox();
-				} ?>
-
-				<?php
 				if(isset($_POST['message']) and $_POST['message']!='')
 				{
 					if($id2==1)
@@ -91,7 +51,39 @@ if(isset($_GET['id'], $_GET['id2']))
 						echo 'An error occurred while editing the message.';
 					}
 				}
-				else
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Edit a reply - <?php echo htmlentities($dn1['title'], ENT_QUOTES, 'UTF-8'); ?> - <?php echo htmlentities($dn1['name'], ENT_QUOTES, 'UTF-8'); ?> - Forum</title>
+    	<?php include '../profile/header0.php';
+    	include '../profile/header01.php';
+		$topmenu = 5;
+		$rightmenu = 0;
+        echo '<link href="'.$design.'/style.css" rel="stylesheet" title="Style" />';
+        ?>
+    </head>
+    <body id="forum_body">
+    	<?php 
+		include '../profile/header1.php';
+		include '../profile/topmenu.php';
+		include '../profile/header2.php';
+		include '../profile/header3.php';
+		?>
+		<span>
+        	<div class="content">
+        		<?php
+				include 'showtoprightbox.php';
+				$breadcrumbs = '<a id="forum_a" href="index.php">Forum Index</a>&nbsp;'.'&gt;&nbsp;<a id="forum_a" href="list_topics.php?parent='.$dn1['parent'].'">'.htmlentities($dn1['name'], ENT_QUOTES, 'UTF-8').'</a>&nbsp;&gt;&nbsp;<a id="forum_a" href="read_topic.php?id='.$id. '">'.htmlentities($dn1['title'], ENT_QUOTES, 'UTF-8').'</a>&nbsp;&gt;&nbsp;Edit a reply';
+				if (isset($_SESSION['loggedin']))
+				{
+					showtopleftbox($breadcrumbs);
+					showtoprightbox($db);
+				}
+				else {
+					shownotloggedintoprightbox();
+				}
+				if(!isset($_POST['message']))
 				{
 				?>
 					<form id="forum_form" action="edit_message.php?id=<?php echo $id; ?>&id2=<?php echo $id2; ?>" method="post">
@@ -106,7 +98,10 @@ if(isset($_GET['id'], $_GET['id2']))
 				<?php } ?>
 			</div>
 		</span>
-		<script type='text/javascript' src='/profile/scripts/footer.js'></script>
+		<?php 
+			include '../profile/footer.php';
+			include '../profile/counter.php'; 
+		?>
 	</body>
 </html>
 <?php

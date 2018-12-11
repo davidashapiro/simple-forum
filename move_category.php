@@ -14,7 +14,7 @@ if(isset($_GET['id'], $_GET['action']) and ($_GET['action']=='up' or $_GET['acti
 	}
 	if($dn1['nb1']>0)
 	{
-		if(isset($_SESSION['username']) and $_SESSION['username']==$admin)
+		if(isset($_SESSION['username']) and $_SESSION['user_level']==$admin)
 		{
 			if($action=='up')
 			{

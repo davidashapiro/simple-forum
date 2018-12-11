@@ -1,34 +1,6 @@
 <?php
 //This page display a personnal message
-include('config.php');
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <?php include 'header0.php'; ?>
-		<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
-		<script>
-          tinymce.init({
-              selector: "textarea",
-              plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table contextmenu paste"
-              ],
-              toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-          });
-		</script>
-        <title>Read a PM</title>
-    </head>
-    <body id="forum_body" >
-    	<script type='text/javascript' src='/profile/scripts/header_part1.js'></script>
-		<script type='text/javascript' src='/profile/scripts/topmenu.js'></script>
-		<script type='text/javascript' src='/profile/scripts/header_part2.js'></script>
-		<script type='text/javascript' src='/profile/scripts/header_part3.js'></script>
-		<span>
-<?php
-if(isset($_SESSION['username']))
-{
+	include('config.php');
 	if(isset($_GET['id']))
 	{
 		$id = intval($_GET['id']);
@@ -73,10 +45,33 @@ if(isset($_SESSION['username']))
 					<?php
 					}
 				}
-			else
-			{
-			?>
-			<div class="content">
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Read a PM</title>
+		<?php include '../profile/header0.php';
+		include '../profile/header01.php';
+		$topmenu = 5;
+		$rightmenu = 0;
+        echo '<link href="'.$design.'/style.css" rel="stylesheet" title="Style" />';
+        ?>
+    </head>
+    <body id="forum_body">
+    	<?php 
+		include '../profile/header1.php';
+		include '../profile/topmenu.php';
+		include '../profile/header2.php';
+		include '../profile/header3.php';
+		?>
+		<span>
+<?php
+if(isset($_SESSION['username']))
+{
+				if(!isset($_POST['message']))
+				{
+				?>
+				<div class="content">
 				<?php
 				include 'showtoprightbox.php';
 				$breadcrumbs = '<a id="forum_a" href="index.php">Forum Index</a>&nbsp;'.'&gt;&nbsp;<a id="forum_a" href="list_pm.php">List of your PMs</a>&nbsp;&gt;&nbsp;Read PM';
@@ -148,6 +143,9 @@ if(isset($_SESSION['username']))
 }
 ?>
 		</span>
-		<script type='text/javascript' src='/profile/scripts/footer.js'></script>
+		<?php 
+			include '../profile/footer.php';
+			include '../profile/counter.php'; 
+		?>
 	</body>
 </html>

@@ -5,14 +5,20 @@ include('config.php');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?php include 'header0.php'; ?>
         <title>List of all the users</title>
+		<?php include '../profile/header0.php';
+		$topmenu = 5;
+		$rightmenu = 0;
+        echo '<link href="'.$design.'/style.css" rel="stylesheet" title="Style" />';
+        ?>
     </head>
-    <body id="forum_body" >
-    	<script type='text/javascript' src='/profile/scripts/header_part1.js'></script>
-		<script type='text/javascript' src='/profile/scripts/topmenu.js'></script>
-		<script type='text/javascript' src='/profile/scripts/header_part2.js'></script>
-		<script type='text/javascript' src='/profile/scripts/header_part3.js'></script>
+    <body id="forum_body">
+    	<?php 
+		include '../profile/header1.php';
+		include '../profile/topmenu.php';
+		include '../profile/header2.php';
+		include '../profile/header3.php';
+		?>
 		<span>
         	<div class="content">
 				<?php
@@ -22,11 +28,9 @@ include('config.php');
 				{
 					showtopleftbox($breadcrumbs);
 					showtoprightbox($db);
-					//echo 'logged in is set';
 				}
 				else {
 					shownotloggedintoprightbox();
-					//echo 'loggedin is not set';
 				} ?>
 				This is the list of all the users:
 				<table id="forum_table" >
@@ -51,6 +55,9 @@ include('config.php');
 				</table>
 			</div>
 		</span>
-		<script type='text/javascript' src='/profile/scripts/footer.js'></script>
+		<?php 
+			include '../profile/footer.php';
+			include '../profile/counter.php'; 
+		?>
 	</body>
 </html>
